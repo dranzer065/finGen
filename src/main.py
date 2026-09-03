@@ -31,6 +31,7 @@ if not tavily_key:
 
 # Set keys in os.environ for underlying LiteLLM/Google SDK
 os.environ["GEMINI_API_KEY"] = gemini_key
+os.environ["GOOGLE_API_KEY"] = gemini_key
 
 # Initialize CrewAI native LLM with the supported canonical model
 gemini_llm = LLM(
@@ -40,15 +41,20 @@ gemini_llm = LLM(
 )
 
 
-def run_fingen_pipeline(user_data: dict):
+def run_fingen_pipeline(user_data: dict) -> str:
     print("\n" + "=" * 50)
     print("🚀 Running finGen Wealth Engine...")
     print("=" * 50 + "\n")
 
     # 1. Deterministic Financial Math (Pure Python - No Hallucinations)
-    monthly_savings = user_data.get("monthly_savings", 2000)
-    monthly_expenses = user_data.get("monthly_expenses", 8000)
-    years = user_data.get("time_horizon_years", 10)
+    income = float(user_data.get("monthly_income", 15000))
+    monthly_expenses = float(user_data.get("monthly_expenses", 8000))
+    
+    # Calculate savings capacity if not directly provided
+    default_savings = max(0.0, income - monthly_expenses)
+    monthly_savings = float(user_data.get("monthly_savings", default_savings))
+    
+    years = int(user_data.get("time_horizon_years", 10))
     expected_return = 12.0  # Historical equity index baseline (12% CAGR)
 
     sip_projections = calculate_sip(
@@ -64,19 +70,21 @@ def run_fingen_pipeline(user_data: dict):
 
     financial_context = (
         f"User Profile:\n"
-        f"- Age: {user_data.get('age')}\n"
-        f"- Employment / Status: {user_data.get('status')}\n"
-        f"- Monthly Income: ₹{user_data.get('monthly_income')}\n"
-        f"- Monthly Expenses: ₹{monthly_expenses}\n"
-        f"- Target Monthly Investment Capacity: ₹{monthly_savings}\n"
+        f"- Age: {user_data.get('age', 22)}\n"
+        f"- Employment / Status: {user_data.get('status', 'Active Earner')}\n"
+        f"- Monthly Income: ₹{income:,.2f}\n"
+        f"- Monthly Expenses: ₹{monthly_expenses:,.2f}\n"
+        f"- Target Monthly Investment Capacity: ₹{monthly_savings:,.2f}\n"
+        f"- Current Liquid Savings: ₹{float(user_data.get('current_savings', 0)):,.2f}\n"
+        f"- High-Interest Debts: ₹{float(user_data.get('existing_debts', 0)):,.2f}\n"
         f"- Investment Horizon: {years} years\n"
-        f"- Risk Tolerance: {user_data.get('risk_level')}\n\n"
+        f"- Risk Tolerance: {user_data.get('risk_tolerance', user_data.get('risk_level', 'Moderate'))}\n\n"
         f"Calculated Hard Facts (Use these exact numbers):\n"
-        f"- Mandatory Emergency Reserve (6 months): ₹{emergency_target['target_amount']}\n"
+        f"- Mandatory Emergency Reserve (6 months): ₹{emergency_target['target_amount']:,.2f}\n"
         f"- 10-Year SIP Projection (at {expected_return}% benchmark CAGR):\n"
-        f"  * Total Invested: ₹{sip_projections['invested_amount']}\n"
-        f"  * Projected Returns: ₹{sip_projections['estimated_returns']}\n"
-        f"  * Expected Total Value: ₹{sip_projections['total_value']}\n"
+        f"  * Total Invested: ₹{sip_projections['invested_amount']:,.2f}\n"
+        f"  * Projected Returns: ₹{sip_projections['estimated_returns']:,.2f}\n"
+        f"  * Expected Total Value: ₹{sip_projections['total_value']:,.2f}\n"
     )
 
     # 2. Instantiate Agents using native Gemini LLM
@@ -126,7 +134,12 @@ def run_fingen_pipeline(user_data: dict):
     )
 
     result = fingen_crew.kickoff()
-    return result
+    return str(result.raw if hasattr(result, "raw") else result)
+    
+
+
+# Alias function so app.py can import either run_fingen or run_fingen_pipeline
+run_fingen = run_fingen_pipeline
 
 
 if __name__ == "__main__":

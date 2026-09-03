@@ -1,10 +1,4 @@
-"""
-finGen - Strategist & Compliance Agent
-Synthesizes profile and research into a concrete 18-25 wealth roadmap.
-"""
-
 from crewai import Agent
-
 
 def create_strategist_agent(llm=None) -> Agent:
     return Agent(
