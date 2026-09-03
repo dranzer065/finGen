@@ -1,0 +1,24 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# Environment Secrets (CRITICAL)
+.env
+.env.local
+
+# CrewAI runtime / cache
+.crewai/
+db/
+
+# IDE files
+.vscode/
+.idea/
