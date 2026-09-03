@@ -1,6 +1,13 @@
 import os
+import sys
+from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
+
+# Ensure root directory is in python search path for Streamlit Cloud
+ROOT_DIR = Path(__file__).resolve().parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
 # Load local environment secrets
 load_dotenv()
