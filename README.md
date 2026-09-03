@@ -1,4 +1,9 @@
-# finGen 🚀
+# finGen • Autonomous Wealth Engine
+
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://fingen-wealth.streamlit.app/)
+
+🔗 **Live App:** [fingen-wealth.streamlit.app](https://fingen-wealth.streamlit.app/)
+
 ### Autonomous Multi-Agent Financial Literacy & Wealth-Building Engine (Ages 18–25)
 
 finGen is an autonomous, multi-agent AI system engineered to guide young adults (ages 18–25) toward long-term financial independence. Built with **CrewAI**, **Google Gemini**, and **Tavily Search**, finGen analyzes cash flows, fetches live ETF and macroeconomic benchmark data, computes deterministic compound projections, and generates tailored wealth roadmaps.
