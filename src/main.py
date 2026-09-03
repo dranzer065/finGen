@@ -35,7 +35,7 @@ os.environ["GOOGLE_API_KEY"] = gemini_key
 
 # Initialize CrewAI native LLM with the supported canonical model
 gemini_llm = LLM(
-    model="gemini/gemini-3.6-flash",
+    model="gemini/gemini-2.5-flash",
     api_key=gemini_key,
     temperature=0.4
 )
@@ -130,6 +130,7 @@ def run_fingen_pipeline(user_data: dict) -> str:
         agents=[profiler, researcher, strategist],
         tasks=[task_profile, task_research, task_strategy],
         process=Process.sequential,
+        max_rpm=10,
         verbose=True
     )
 
