@@ -1,16 +1,9 @@
-# Multi-Agent Framework & Orchestration
+streamlit>=1.35.0
 crewai>=0.80.0
 crewai-tools>=0.14.0
+google-genai>=0.1.0
 pydantic>=2.7.0
-
-# Financial Data & Market Tools
 yfinance>=0.2.40
-
-# Web Search & Information Retrieval
 tavily-python>=0.3.3
-
-# Environment Variables & Config
 python-dotenv>=1.0.1
-
-# Testing
 pytest>=8.0.0
